@@ -17,7 +17,7 @@ fetch("http://localhost:3000/api/products")
     //je creé une boucle on apliquant la methode de concatination a chaque passage 
     for (let i = 0; i < allKanap.length; i++) {
       container.innerHTML +=
-      //j'ajouté le contenue de mes vignettes dans mon html(#items)
+      //jai'ajouté le contenue de mes vignettes dans mon html(#items)
         `<a href="./product.html?id=${allKanap[i]._id}"> 
             <article>
                 <img src=${allKanap[i].imageUrl} alt=${allKanap[i].altTxt}>
