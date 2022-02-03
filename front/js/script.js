@@ -1,23 +1,23 @@
-//je selectionne mon element items grace a son selecteur
+//selectionner mon element items grace à son selecteur
 const container = document.querySelector("#items");
 
 console.log(container)
-//j'appele l'url de mon api grace a la requette http fetch
+//appeler l'url de mon api en utilisant la requette http fetch
 fetch("http://localhost:3000/api/products")
-// j'apple la fonction then pour récupérer le résultat de la requête au format json
+// appler la fonction then pour récupérer le résultat de la requête au format json
 // en ayant vérifié au préalable que la requête s’était bien passée avec res.ok
   .then(function(allKanap) {
     if (allKanap.ok) {
       return allKanap.json();
     }
   })
-  //je stoke mon resulat dans une const
+  //stocker la valeur récuperer dans une const
   .then(function(value) {
     const allKanap = value;
-    //je creé une boucle on apliquant la methode de concatination a chaque passage 
+    //créer une boucle on appliquant la methode de concatination a chaque passage 
     for (let i = 0; i < allKanap.length; i++) {
       container.innerHTML +=
-      //jai'ajouté le contenue de mes vignettes dans mon html(#items)
+      //ajoutr le contenue de mes vignettes dans mon html(#items)
         `<a href="./product.html?id=${allKanap[i]._id}"> 
             <article>
                 <img src=${allKanap[i].imageUrl} alt=${allKanap[i].altTxt}>
@@ -28,8 +28,10 @@ fetch("http://localhost:3000/api/products")
     }
     
   })
-  //en cas d'erreur je cree une alerte
+  //en cas d'erreur afficher un msg d'erreur dans mon console +créer une alerte (pour l'utilisateur)
   .catch(function(err) {
     console.log('Une erreur est survenue')
     alert("Veuillez nous excusez les produits ne sont pas disponible pour le moment.")
   });
+ 
+ 
