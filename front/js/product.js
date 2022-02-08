@@ -14,6 +14,18 @@ const colors = document.querySelector('#colors')
 const quantity = document.getElementById('quantity');
 const addToCart = document.getElementById("addToCart");
 
+// déclarer mes variables (quantity et colors)
+let quantitySelected = 0;
+let colorSelected = "";
+
+// classe Article qui permet de créer un objet article
+let Article = class {
+    constructor(_id, quantity, color) {
+        this._id = _id;
+        this.quantity = quantity;
+        this.color = color;
+    }
+};
 
 //console.log(imgAtribute)
 fetch("http://localhost:3000/api/products/" + id)
@@ -41,27 +53,14 @@ fetch("http://localhost:3000/api/products/" + id)
     /*catch erreur (retour d'un msg sur mon console : Fetch Erreur en cas d'erreur) 
     creé une aletre pour le client:"Veuillez nous excusez les produits ne sont pas disponible pour le moment." )*/
     .catch(function (err) {
-        console.log("Fetch Erreur");
-        alert("Veuillez nous excusez les produits ne sont pas disponible pour le moment.")
+        console.log(err);
+        alert("Veuillez nous excusez, le produit n'est pas disponible pour le moment.")
     });
 // Ajouter des produits dans le panier:
-// cree une une variable class qui contient les donneés de mon article
-let Article  = class {
-    constructor(_id, quantity, color) {
-        this._id = _id;
-        this.quantity = quantity;
-        this.color = color;
-    }
-};
 
-// déclarer un tableau 
-
-// déclarer mes variables (quantity et colors)
-let quantitySelected = 0;
-let colorSelected = "";
 //creé mon evenement input qui met la valeur de la quantité input selectionné dans ma variable quantitySelected
 quantity.addEventListener('input', event => {
-    quantitySelected = event.target.value;
+    quantitySelected = Number.parseInt(event.target.value);
 });
 //creé mon evenement input qui met la valeur de la couleur input selectionné dans ma variable  colorSelected
 colors.addEventListener('input', event => {
@@ -70,18 +69,17 @@ colors.addEventListener('input', event => {
 });
 // creé mon evenement click qui ajoute les valeurs seclectinnés dans mon new article 
 addToCart.addEventListener('click', event => {
-    let article = new Article (); 
+    let article = new Article();
     article._id = id;
     if (quantitySelected == 0) {
         return alert("Veuillez choisir la quantité")
     } else {
         article.quantity = quantitySelected
     }
-    console.log(article.quantity)
+    //console.log(article.quantity)
     if (quantitySelected > 100) {
         return alert("la quantité doit être inférieur à 100")
-    }
-    else {
+    } else {
         article.quantity = quantitySelected
     }
 
@@ -92,7 +90,6 @@ addToCart.addEventListener('click', event => {
     }
 
     //si mon local storage est vide, on crée un tableau et on ajoute l'article selectionne
-   
     if (localStorage.getItem('panier') === null) {
         let cart = [];
         cart.push(article);
@@ -101,32 +98,25 @@ addToCart.addEventListener('click', event => {
     } else {
         let cart = [];
         cart = JSON.parse(localStorage.getItem('panier'));
-        let found = cart.find(element => element._id === article._id && element.color === article.color);
-        if (found) {
-            let quantityFound = Number.parseInt(found.quantity);
-            let totalQuantity = quantityFound + Number.parseInt(quantitySelected);
-            
-         if (totalQuantity>100){
-             return alert ("La quantité est indisponible")
-         }
-            else {article.quantity = totalQuantity;
-         }
-
-            var index = cart.indexOf(found);
-            //index trouvé
-            if (index !== -1) {
-                cart.splice(index, 1);
+        let existingArticle;
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i]._id === article._id && cart[i].color === article.color) {
+                existingArticle = cart[i]
             }
-
-            cart.push(article)
-            let kanap = JSON.stringify(cart);
-            localStorage.setItem('panier', kanap);
-
-        } else {
-            cart.push(article);
-            let kanap = JSON.stringify(cart);
-            localStorage.setItem('panier', kanap);
         }
-    }
+        // Si l'element existe dans localStorage, on met à  jour la quantite du nouvel article et on supprime l'ancien
+        if (existingArticle) {
+            article.quantity = Number.parseInt(article.quantity) + Number.parseInt(existingArticle.quantity);
 
-});  
+       var indexOfExistingArticle = cart.indexOf(existingArticle);
+            //supprimer l'ancien article dans le tableau 
+            cart.splice(indexOfExistingArticle, 1);
+        }
+       
+        cart.push(article);
+        let kanap = JSON.stringify(cart);
+        localStorage.setItem('panier', kanap);
+
+    }    
+    
+}); 
