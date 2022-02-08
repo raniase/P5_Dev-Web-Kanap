@@ -107,6 +107,10 @@ addToCart.addEventListener('click', event => {
         // Si l'element existe dans localStorage, on met à  jour la quantite du nouvel article et on supprime l'ancien
         if (existingArticle) {
             article.quantity = Number.parseInt(article.quantity) + Number.parseInt(existingArticle.quantity);
+        if (article.quantity >= 100){
+            return alert ("La quantité demandée est indisponible")
+
+        }
 
        var indexOfExistingArticle = cart.indexOf(existingArticle);
             //supprimer l'ancien article dans le tableau 
