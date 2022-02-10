@@ -2,7 +2,8 @@
 /* utiliser La propriété searchParams pour retourner l' id de l'article cliqué sur le console de ma page produits */
 let params = new URL(document.location).searchParams;
 let id = params.get("id");
-/* recupérer les champs du produit a repmlir dans mon  html selon les attributs suivants :
+console.log (id)
+/* recupérer les champs du produit à repmlir dans mon  html selon les attributs suivants :
 colors/price/name/imageUrl/description/altTxt */
 
 const imgAtribute = document.querySelector('.item__img');
@@ -89,38 +90,43 @@ addToCart.addEventListener('click', event => {
         article.color = colorSelected;
     }
 
-    //si mon local storage est vide, on crée un tableau et on ajoute l'article selectionne
+    //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
     if (localStorage.getItem('panier') === null) {
         let cart = [];
         cart.push(article);
         let kanap = JSON.stringify(cart);
         localStorage.setItem('panier', kanap);
+        // si nn si mon tableau prend le contenue de mon panier dans le local storage 
     } else {
         let cart = [];
         cart = JSON.parse(localStorage.getItem('panier'));
-        let existingArticle;
+        let articleExiste;
+        // parcourir le tableau en comparant l'id et la couleur de mon tableau ajouté avec l'id et la couleur de l'article de mon panier 
         for (let i = 0; i < cart.length; i++) {
             if (cart[i]._id === article._id && cart[i].color === article.color) {
-                existingArticle = cart[i]
+                articleExiste = cart[i]
             }
+          //console.log (cart)
         }
-        // Si l'element existe dans localStorage, on met à  jour la quantite du nouvel article et on supprime l'ancien
-        if (existingArticle) {
-            article.quantity = Number.parseInt(article.quantity) + Number.parseInt(existingArticle.quantity);
-        if (article.quantity >= 100){
-            return alert ("La quantité demandée est indisponible")
+        // Si l'element existe dans localStorage, mettre à  jour la quantite du nouvel article et suprimer l'ancien
+        if (articleExiste) {
+            article.quantity = Number.parseInt(article.quantity) + Number.parseInt(articleExiste.quantity);
+           // console.log (article.quantity)
+        // créer une condition pour limité la quantité enregistré dans le local storage
+            if (article.quantity >= 100) {
+                return alert("La quantité demandée est indisponible")
 
-        }
+            }
 
-       var indexOfExistingArticle = cart.indexOf(existingArticle);
+            var indexOfarticleExiste = cart.indexOf(articleExiste);
             //supprimer l'ancien article dans le tableau 
-            cart.splice(indexOfExistingArticle, 1);
+            cart.splice(indexOfarticleExiste, 1);
         }
-       
+        // faire un push de mon article 
         cart.push(article);
         let kanap = JSON.stringify(cart);
         localStorage.setItem('panier', kanap);
 
-    }    
-    
+    }
+
 }); 
