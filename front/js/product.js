@@ -2,7 +2,7 @@
 /* utiliser La propriété searchParams pour retourner l' id de l'article cliqué sur le console de ma page produits */
 let params = new URL(document.location).searchParams;
 let id = params.get("id");
-console.log (id)
+
 /* recupérer les champs du produit à repmlir dans mon  html selon les attributs suivants :
 colors/price/name/imageUrl/description/altTxt */
 
@@ -15,6 +15,8 @@ const colors = document.querySelector('#colors')
 const quantity = document.getElementById('quantity');
 const addToCart = document.getElementById("addToCart");
 
+
+
 // déclarer mes variables (quantity et colors)
 let quantitySelected = 0;
 let colorSelected = "";
@@ -24,9 +26,12 @@ let Article = class {
     constructor(_id, quantity, color) {
         this._id = _id;
         this.quantity = quantity;
-        this.color = color;
+        this.color = color; 
+    
     }
 };
+
+
 
 //console.log(imgAtribute)
 fetch("http://localhost:3000/api/products/" + id)
@@ -70,26 +75,23 @@ colors.addEventListener('input', event => {
 });
 // creé mon evenement click qui ajoute les valeurs seclectinnés dans mon new article 
 addToCart.addEventListener('click', event => {
+    console.log(imgAtribute)
     let article = new Article();
     article._id = id;
     if (quantitySelected == 0) {
         return alert("Veuillez choisir la quantité")
-    } else {
-        article.quantity = quantitySelected
-    }
-    //console.log(article.quantity)
-    if (quantitySelected > 100) {
+    } 
+    else if (quantitySelected > 100) {
         return alert("la quantité doit être inférieur à 100")
-    } else {
-        article.quantity = quantitySelected
     }
 
-    if (colorSelected == "") {
+    else if (colorSelected == ""){
         return alert("Veuillez choissez la couleur")
-    } else {
+    }
+    else {
+        article.quantity = quantitySelected
         article.color = colorSelected;
     }
-
     //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
     if (localStorage.getItem('panier') === null) {
         let cart = [];
@@ -130,3 +132,4 @@ addToCart.addEventListener('click', event => {
     }
 
 }); 
+
