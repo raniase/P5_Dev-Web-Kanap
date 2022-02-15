@@ -23,11 +23,15 @@ let colorSelected = "";
 
 // classe Article qui permet de créer un objet article
 let Article = class {
-    constructor(_id, quantity, color) {
+    constructor(_id, quantity, color, productPrice, imageUrl, name ,altTxt) {
         this._id = _id;
         this.quantity = quantity;
-        this.color = color; 
-    
+        this.color = color;
+        this.productPrice = productPrice;
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.altTxt = altTxt;
+     
     }
 };
 
@@ -75,61 +79,76 @@ colors.addEventListener('input', event => {
 });
 // creé mon evenement click qui ajoute les valeurs seclectinnés dans mon new article 
 addToCart.addEventListener('click', event => {
-    console.log(imgAtribute)
     let article = new Article();
     article._id = id;
     if (quantitySelected == 0) {
         return alert("Veuillez choisir la quantité")
-    } 
+    }
     else if (quantitySelected > 100) {
         return alert("la quantité doit être inférieur à 100")
     }
 
-    else if (colorSelected == ""){
+    else if (colorSelected == "") {
         return alert("Veuillez choissez la couleur")
     }
     else {
         article.quantity = quantitySelected
         article.color = colorSelected;
     }
-    //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
-    if (localStorage.getItem('panier') === null) {
-        let cart = [];
-        cart.push(article);
-        let kanap = JSON.stringify(cart);
-        localStorage.setItem('panier', kanap);
-        // si nn si mon tableau prend le contenue de mon panier dans le local storage 
-    } else {
-        let cart = [];
-        cart = JSON.parse(localStorage.getItem('panier'));
-        let articleExiste;
-        // parcourir le tableau en comparant l'id et la couleur de mon tableau ajouté avec l'id et la couleur de l'article de mon panier 
-        for (let i = 0; i < cart.length; i++) {
-            if (cart[i]._id === article._id && cart[i].color === article.color) {
-                articleExiste = cart[i]
+
+    fetch("http://localhost:3000/api/products/" + id)
+        .then(function (result) {
+            if (result.ok) {
+                return result.json();
             }
-          //console.log (cart)
-        }
-        // Si l'element existe dans localStorage, mettre à  jour la quantite du nouvel article et suprimer l'ancien
-        if (articleExiste) {
-            article.quantity = Number.parseInt(article.quantity) + Number.parseInt(articleExiste.quantity);
-           // console.log (article.quantity)
-        // créer une condition pour limité la quantité enregistré dans le local storage
-            if (article.quantity >= 100) {
-                return alert("La quantité demandée est indisponible")
+        })
+        .then(function (product) {
+            //Ajouter prix, image url et description pour les utiliser dans le panier
+            article.imageUrl = product.imageUrl;
+            article.altTxt = product.altTxt;
+            article.productPrice = product.price;
+            article.name = product.name;
+            //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
+            if (localStorage.getItem('panier') === null) {
+                let cart = [];
+                cart.push(article);
+                let kanap = JSON.stringify(cart);
+                localStorage.setItem('panier', kanap);
+                // si nn si mon tableau prend le contenue de mon panier dans le local storage 
+            } else {
+                let cart = [];
+                cart = JSON.parse(localStorage.getItem('panier'));
+                let articleExiste;
+                // parcourir le tableau en comparant l'id et la couleur de mon tableau ajouté avec l'id et la couleur de l'article de mon panier 
+                for (let i = 0; i < cart.length; i++) {
+                    if (cart[i]._id === article._id && cart[i].color === article.color) {
+                        articleExiste = cart[i]
+                    }
+                    //console.log (cart)
+                }
+                // Si l'element existe dans localStorage, mettre à  jour la quantite du nouvel article et suprimer l'ancien
+                if (articleExiste) {
+                    article.quantity = Number.parseInt(article.quantity) + Number.parseInt(articleExiste.quantity);
+                    // console.log (article.quantity)
+                    // créer une condition pour limité la quantité enregistré dans le local storage
+                    if (article.quantity >= 100) {
+                        return alert("La quantité demandée est indisponible")
+
+                    }
+
+                    var indexOfarticleExiste = cart.indexOf(articleExiste);
+                    console.log (indexOfarticleExiste)
+                    //supprimer l'ancien article dans le tableau 
+                    cart.splice(indexOfarticleExiste, 1);
+                }
+                // faire un push de mon article 
+                cart.push(article);
+                let kanap = JSON.stringify(cart);
+                localStorage.setItem('panier', kanap);
 
             }
-
-            var indexOfarticleExiste = cart.indexOf(articleExiste);
-            //supprimer l'ancien article dans le tableau 
-            cart.splice(indexOfarticleExiste, 1);
-        }
-        // faire un push de mon article 
-        cart.push(article);
-        let kanap = JSON.stringify(cart);
-        localStorage.setItem('panier', kanap);
-
-    }
+        })
 
 }); 
+
 
