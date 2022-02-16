@@ -23,7 +23,7 @@ let colorSelected = "";
 
 // classe Article qui permet de créer un objet article
 let Article = class {
-    constructor(_id, quantity, color, productPrice, imageUrl, name ,altTxt) {
+    constructor(_id, quantity, color, productPrice, imageUrl, name ,altTxt,) {
         this._id = _id;
         this.quantity = quantity;
         this.color = color;
@@ -31,7 +31,8 @@ let Article = class {
         this.imageUrl = imageUrl;
         this.name = name;
         this.altTxt = altTxt;
-     
+       
+      
     }
 };
 
@@ -108,6 +109,7 @@ addToCart.addEventListener('click', event => {
             article.altTxt = product.altTxt;
             article.productPrice = product.price;
             article.name = product.name;
+            article.totalPrice = product.totalPrice;
             //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
             if (localStorage.getItem('panier') === null) {
                 let cart = [];

@@ -3,9 +3,9 @@ let cart = []
 cart = JSON.parse(localStorage.getItem('panier'));
 const recapPanier = document.querySelector("#cart__items")
 const changeQuantite = document.getElementsByClassName("itemQuantity")
+const totalElement = document.getElementsByClassName("total")
 
- 
-for (let i = 0; i < cart.length; i++) {
+for (let i = 0; i < cart.length; i++) { 
   recapPanier.innerHTML +=
   `<article class="cart__item" id=${cart[i]._id} data-color=${cart[i].color}>
           <div class="cart__item__img">
@@ -15,7 +15,7 @@ for (let i = 0; i < cart.length; i++) {
             <div class="cart__item__content__description">
              <h2>${cart[i].name}</h2>
              <p>${(cart[i].color)}</p>
-             <p class="total">${cart[i].productPrice * (cart[i].quantity)} €</p>
+             <p class="total">${(cart[i].productPrice * cart[i].quantity )} €</p>
             </div>
             <div class="cart__item__content__settings">
               <div class="cart__item__content__settings__quantity">
@@ -30,6 +30,7 @@ for (let i = 0; i < cart.length; i++) {
         </article>`
       
 }
+//Suprimer l'article
 const htmlData = document.getElementsByClassName('deleteItem');
 for(let i =0; i<htmlData.length; i++){
   htmlData[i].addEventListener("click", (event) =>{
@@ -45,38 +46,53 @@ for(let i =0; i<htmlData.length; i++){
 }
 
 const totalQty = document.getElementById("totalQuantity")
-console.log (totalQty)
 const totalPrice = document.getElementById("totalPrice")
-console.log (totalPrice)
- 
+
+// calculer le total de de l'article ajouter avant la modification  
+let totalPrix = 0
+let nbrArticle = 0
+for (let i = 0; i < cart.length; i++) {
+    totalPrix += cart[i].quantity * cart[i].productPrice;
+    nbrArticle += cart[i].quantity
+
+    cart[i].totalPrice = totalPrix;
+    localStorage.setItem('panier', JSON.stringify(cart))
+}
+document.location.reload()
+totalPrice.innerHTML = `${totalPrix}`;
+totalQty.innerHTML = `${nbrArticle}`;
+
 const elementHtml = document.getElementsByClassName("cart__item__content__settings__quantity")
- console.log (elementHtml)
-
+//modifier la valeur ajouté 
  for(let i =0; i<elementHtml.length; i++){
-  elementHtml[i].addEventListener("click", (event) =>{
+   elementHtml[i].addEventListener("click", (event) => {
      elementModif = elementHtml[i].closest('article');
-     console.log (elementModif)
-
-     const ofId = elementModif.id 
-     console.log (ofId)
-
+     const ofId = elementModif.id
      const ofColor = elementModif.dataset.color
-     console.log (ofColor)
-
      let quantiteAjout = elementModif
-    quantiteAjout = Number.parseInt(event.target.value);
-     console.log(quantiteAjout)
-
-     
-     let index = cart.findIndex(cart => (ofId === cart._id ) &&  (cart.color === ofColor ));
-     console.log(cart[index])
+     quantiteAjout = Number.parseInt(event.target.value);
+     let index = cart.findIndex(cart => (ofId === cart._id) && (cart.color === ofColor));
      cart[index].quantity = quantiteAjout;
      localStorage.setItem('panier', JSON.stringify(cart))
-     document.location.reload() 
-  })
-  }
+     // calculer  le total d'un article
+     let modifPrix = document.getElementsByClassName("total");
+     if (cart[index].quantity == 0) {
+       document.location.reload()
+     } else {
+       modifPrix[index].innerHTML = cart[index].productPrice * cart[index].quantity + " €"
+     }
+   //calculer le total du panier 
+     let totalPrix = 0
+     let nbrArticle = 0
+     for (let i = 0; i < cart.length; i++) {
+         totalPrix = totalPrix + (cart[i].quantity * cart[i].productPrice);
+         nbrArticle = nbrArticle + cart[i].quantity
+     }
+     totalPrice.innerHTML = `${totalPrix}`;
+     totalQty.innerHTML = `${nbrArticle}`;
+   })
+}
 
-/* formulaire */
 
 
 
