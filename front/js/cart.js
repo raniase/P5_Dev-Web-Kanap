@@ -51,14 +51,10 @@ const totalPrice = document.getElementById("totalPrice")
 // calculer le total de de l'article ajouter avant la modification  
 let totalPrix = 0
 let nbrArticle = 0
-for (let i = 0; i < cart.length; i++) {
+for (let i = 0; i < cart.length; i++) { 
     totalPrix += cart[i].quantity * cart[i].productPrice;
     nbrArticle += cart[i].quantity
-
-    cart[i].totalPrice = totalPrix;
-    localStorage.setItem('panier', JSON.stringify(cart))
 }
-document.location.reload()
 totalPrice.innerHTML = `${totalPrix}`;
 totalQty.innerHTML = `${nbrArticle}`;
 
@@ -67,13 +63,15 @@ const elementHtml = document.getElementsByClassName("cart__item__content__settin
  for(let i =0; i<elementHtml.length; i++){
    elementHtml[i].addEventListener("click", (event) => {
      elementModif = elementHtml[i].closest('article');
-     const ofId = elementModif.id
-     const ofColor = elementModif.dataset.color
+     const idOfElement = elementModif.id
+     const ColorOfElement = elementModif.dataset.color
      let quantiteAjout = elementModif
      quantiteAjout = Number.parseInt(event.target.value);
-     let index = cart.findIndex(cart => (ofId === cart._id) && (cart.color === ofColor));
+     let index = cart.findIndex(cart => (  idOfElement=== cart._id) && (cart.color === ColorOfElement));
      cart[index].quantity = quantiteAjout;
+     cart[index].totalPrice = cart[index].quantity * cart[index].productPrice;
      localStorage.setItem('panier', JSON.stringify(cart))
+     
      // calculer  le total d'un article
      let modifPrix = document.getElementsByClassName("total");
      if (cart[index].quantity == 0) {
@@ -92,7 +90,14 @@ const elementHtml = document.getElementsByClassName("cart__item__content__settin
      totalQty.innerHTML = `${nbrArticle}`;
    })
 }
-
+// le formulaire //
+let form = document.getElementsByClassName("cart__order__form");
+let formFirst = document.getElementById("firstName");
+let formLast = document.getElementById("lastName");
+let formAdress = document.getElementById("address");
+let formCity = document.getElementById("city");
+let formMail = document.getElementById("email");
+let formValid = document.getElementById("order");
 
 
 
