@@ -110,6 +110,7 @@ addToCart.addEventListener('click', event => {
             article.productPrice = product.price;
             article.name = product.name;
             article.totalPrice = product.totalPrice;
+            article.contact = product.contact
             //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
             if (localStorage.getItem('panier') === null) {
                 let cart = [];
