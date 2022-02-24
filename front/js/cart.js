@@ -1,11 +1,33 @@
+function $_GET(param) {
+  var vars = {};
+  window.location.href.replace(location.hash, '').replace(
+    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+    function (m, key, value) { // callback
+      vars[key] = value !== undefined ? value : '';
+    }
+  );
 
+  if (param) {
+    return vars[param] ? vars[param] : null;
+  }
+  return vars;
+}
+var id = $_GET('id');
+if (id != null) {
+  const nbOrder = document.getElementById("orderId");
+  nbOrder.innerHTML = id
+  localStorage.clear();
+}
+//https://www.creativejuiz.fr/blog/javascript/recuperer-parametres-get-url-javascript
 let cart = []
 cart = JSON.parse(localStorage.getItem('panier'));
 const recapPanier = document.querySelector("#cart__items")
 const changeQuantite = document.getElementsByClassName("itemQuantity")
 const totalElement = document.getElementsByClassName("total")
-const nbOrder = document.getElementById("orderId");
-
+const htmlData = document.getElementsByClassName('deleteItem');
+const totalQty = document.getElementById("totalQuantity")
+const totalPrice = document.getElementById("totalPrice")
+const elementHtml = document.getElementsByClassName("cart__item__content__settings__quantity")
 
 for (let i = 0; i < cart.length; i++) {
   recapPanier.innerHTML +=
@@ -33,7 +55,7 @@ for (let i = 0; i < cart.length; i++) {
 
 }
 //Suprimer l'article
-const htmlData = document.getElementsByClassName('deleteItem');
+
 for (let i = 0; i < htmlData.length; i++) {
   htmlData[i].addEventListener("click", (event) => {
     articleAsupprimer = htmlData[i].closest('article');
@@ -47,8 +69,7 @@ for (let i = 0; i < htmlData.length; i++) {
   })
 }
 
-const totalQty = document.getElementById("totalQuantity")
-const totalPrice = document.getElementById("totalPrice")
+
 
 // calculer le total de de l'article ajouter avant la modification  
 let totalPrix = 0
@@ -60,7 +81,7 @@ for (let i = 0; i < cart.length; i++) {
 totalPrice.innerHTML = `${totalPrix}`;
 totalQty.innerHTML = `${nbrArticle}`;
 
-const elementHtml = document.getElementsByClassName("cart__item__content__settings__quantity")
+
 //modifier la valeur ajouté 
 for (let i = 0; i < elementHtml.length; i++) {
   elementHtml[i].addEventListener("click", (event) => {
@@ -100,9 +121,6 @@ let formAdress = document.getElementById("address");
 let formCity = document.getElementById("city");
 let formMail = document.getElementById("email");
 let formValid = document.getElementById("order");
-
-
-
 
 // CREATION EXPRESSION REGULIAIRE EMAIL
 formMail.addEventListener('change', function () {
@@ -231,7 +249,26 @@ formValid.addEventListener("click", function (evt) {
       city: `${formCity.value}`,
       email: `${formMail.value}`
     }
-    return alert('Votre commande est bien passée')
+    localStorage.setItem("contact", JSON.stringify(contact));
+    let products = []
+    for (i = 0; i < cart.length; i++) {
+      products.push(cart[i]._id)
+    }
+    let envoiProducts = { contact, products }
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      body: JSON.stringify(envoiProducts),
+      headers: {
+        "content-type": "application/json",
+      }
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then((data) => {
+        let orderId = data.orderId
+        window.location.href = `./confirmation.html?id=${orderId}`;
 
+      })
   }
-})
+});
