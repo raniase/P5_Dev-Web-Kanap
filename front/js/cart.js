@@ -54,6 +54,7 @@ for (let i = 0; i < cart.length; i++) {
         </article>`
 
 }
+
 //Suprimer l'article
 
 for (let i = 0; i < htmlData.length; i++) {
@@ -69,9 +70,8 @@ for (let i = 0; i < htmlData.length; i++) {
   })
 }
 
+// calculer le total de de l'article ajouter avant la modification 
 
-
-// calculer le total de de l'article ajouter avant la modification  
 let totalPrix = 0
 let nbrArticle = 0
 for (let i = 0; i < cart.length; i++) {
@@ -81,8 +81,8 @@ for (let i = 0; i < cart.length; i++) {
 totalPrice.innerHTML = `${totalPrix}`;
 totalQty.innerHTML = `${nbrArticle}`;
 
-
 //modifier la valeur ajouté 
+
 for (let i = 0; i < elementHtml.length; i++) {
   elementHtml[i].addEventListener("click", (event) => {
     elementModif = elementHtml[i].closest('article');
@@ -96,13 +96,16 @@ for (let i = 0; i < elementHtml.length; i++) {
     localStorage.setItem('panier', JSON.stringify(cart))
 
     // calculer  le total d'un article
+
     let modifPrix = document.getElementsByClassName("total");
     if (cart[index].quantity == 0) {
       document.location.reload()
     } else {
       modifPrix[index].innerHTML = cart[index].productPrice * cart[index].quantity + " €"
     }
+
     //calculer le total du panier 
+
     let totalPrix = 0
     let nbrArticle = 0
     for (let i = 0; i < cart.length; i++) {
@@ -113,7 +116,9 @@ for (let i = 0; i < elementHtml.length; i++) {
     totalQty.innerHTML = `${nbrArticle}`;
   })
 }
+
 // le formulaire //
+
 let form = document.getElementsByClassName("cart__order__form");
 let formFirst = document.getElementById("firstName");
 let formLast = document.getElementById("lastName");
@@ -123,6 +128,7 @@ let formMail = document.getElementById("email");
 let formValid = document.getElementById("order");
 
 // CREATION EXPRESSION REGULIAIRE EMAIL
+
 formMail.addEventListener('change', function () {
   validMail(this)
 });
@@ -155,6 +161,7 @@ const validMail = function (inputMail) {
 };
 
 // CREATION EXPRESSION REGULIAIRE VILLE
+
 formCity.addEventListener('change', function () {
   validCity(this)
 });
@@ -172,6 +179,7 @@ const validCity = function (inputCity) {
 /* * permet de verifier tout les caractere qui sont a gauche de la fin de la séquance*/
 
 /* CREATION EXPRESSION REGULIAIRE ADRESSE*/
+
 formAdress.addEventListener('change', function () {
   validAdress(this)
 });
@@ -188,6 +196,7 @@ const validAdress = function (inputAdress) {
 }
 
 // CREATION EXPRESSION REGULIAIRE LASTNAME
+
 formLast.addEventListener('change', function () {
   validLast(this)
 });
@@ -206,8 +215,8 @@ const validLast = function (inputLast) {
 
 };
 
-
 // CREATION EXPRESSION REGULIAIRE FIRSTNAME
+
 formFirst.addEventListener('change', function () {
   validFirst(this)
 });
@@ -224,7 +233,6 @@ const validFirst = function (inputFirst) {
 
 };
 
-
 // ENVOI DU FORMULAIRE AVEC FETCH
 
 formValid.addEventListener("click", function (evt) {
@@ -235,13 +243,10 @@ formValid.addEventListener("click", function (evt) {
     !formAdress.value ||
     !formCity.value ||
     !formMail.value
-
   ) {
     return alert('Veuillez remplir tous les champs et cliquer')
-
   }
   else {
-
     const contact = {
       firstName: `${formFirst.value}`,
       lastName: `${formLast.value}`,
