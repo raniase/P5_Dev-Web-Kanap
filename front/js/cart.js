@@ -1,4 +1,5 @@
-function $_GET(param) {
+// Page confirmation 
+function GET(confirmed) {
   var vars = {};
   window.location.href.replace(location.hash, '').replace(
     /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
@@ -7,17 +8,18 @@ function $_GET(param) {
     }
   );
 
-  if (param) {
-    return vars[param] ? vars[param] : null;
+  if (confirmed) {
+    return vars[confirmed] ? vars[confirmed] : null;
   }
   return vars;
 }
-var id = $_GET('id');
+var id = GET('id');
 if (id != null) {
   const nbOrder = document.getElementById("orderId");
   nbOrder.innerHTML = id
   localStorage.clear();
 }
+
 //https://www.creativejuiz.fr/blog/javascript/recuperer-parametres-get-url-javascript
 let cart = []
 cart = JSON.parse(localStorage.getItem('panier'));
@@ -274,6 +276,8 @@ formValid.addEventListener("click", function (evt) {
         let orderId = data.orderId
         window.location.href = `./confirmation.html?id=${orderId}`;
 
+
       })
+
   }
 });
