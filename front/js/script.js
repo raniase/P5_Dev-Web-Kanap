@@ -1,17 +1,14 @@
-//selectionner mon element items grace à son selecteur
+
 const container = document.querySelector("#items");
 
 console.log(container)
 //appeler l'url de mon api en utilisant la requette http fetch
 fetch("http://localhost:3000/api/products")
-// appler la fonction then pour récupérer le résultat de la requête au format json
-// en ayant vérifié au préalable que la requête s’était bien passée avec res.ok
   .then(function(allKanap) {
     if (allKanap.ok) {
       return allKanap.json();
     }
   })
-  //stocker la valeur récuperer dans une const
   .then(function(value) {
     const allKanap = value;
     //créer une boucle on appliquant la methode de concatination a chaque passage 

@@ -1,4 +1,3 @@
-//https://developer.mozilla.org/fr/docs/Web/API/URL/searchParams
 /* utiliser La propriété searchParams pour retourner l' id de l'article cliqué sur le console de ma page produits */
 let params = new URL(document.location).searchParams;
 let id = params.get("id");
@@ -10,12 +9,9 @@ const imgAtribute = document.querySelector('.item__img');
 const productTitle = document.querySelector('#title');
 const price = document.querySelector('#price');
 const descript = document.querySelector('#description');
-
 const colors = document.querySelector('#colors')
 const quantity = document.getElementById('quantity');
 const addToCart = document.getElementById("addToCart");
-
-
 
 // déclarer mes variables (quantity et colors)
 let quantitySelected = 0;
@@ -23,7 +19,7 @@ let colorSelected = "";
 
 // classe Article qui permet de créer un objet article
 let Article = class {
-    constructor(_id, quantity, color, productPrice, imageUrl, name ,altTxt,) {
+    constructor(_id, quantity, color, productPrice, imageUrl, name, altTxt,) {
         this._id = _id;
         this.quantity = quantity;
         this.color = color;
@@ -31,14 +27,10 @@ let Article = class {
         this.imageUrl = imageUrl;
         this.name = name;
         this.altTxt = altTxt;
-       
-      
+
+
     }
 };
-
-
-
-//console.log(imgAtribute)
 fetch("http://localhost:3000/api/products/" + id)
     .then(function (result) {
         if (result.ok) {
@@ -52,9 +44,6 @@ fetch("http://localhost:3000/api/products/" + id)
         productTitle.innerHTML = `${product.name}`;
         price.innerHTML = `${product.price}`;
         descript.innerHTML = `${product.description}`;
-        /* mettre mes coulour dans une const /creé mon tab de couleur
-        parcourir mon tab en mettant chaque couleur dans la partie option valeur du code html 
-        utiliser la concatination */
         const couleur = product.colors;
         //console.log (couleur)
         for (let i = 0; i < couleur.length; i++) {
@@ -62,7 +51,7 @@ fetch("http://localhost:3000/api/products/" + id)
         }
     })
     /*catch erreur (retour d'un msg sur mon console : Fetch Erreur en cas d'erreur) 
-    creé une aletre pour le client:"Veuillez nous excusez les produits ne sont pas disponible pour le moment." )*/
+    creé une aletre pour le client*/
     .catch(function (err) {
         console.log(err);
         alert("Veuillez nous excusez, le produit n'est pas disponible pour le moment.")
@@ -76,7 +65,6 @@ quantity.addEventListener('input', event => {
 //creé mon evenement input qui met la valeur de la couleur input selectionné dans ma variable  colorSelected
 colors.addEventListener('input', event => {
     colorSelected = event.target.value;
-    console.log(colors.value);
 });
 // creé mon evenement click qui ajoute les valeurs seclectinnés dans mon new article 
 addToCart.addEventListener('click', event => {
@@ -104,7 +92,7 @@ addToCart.addEventListener('click', event => {
             }
         })
         .then(function (product) {
-            //Ajouter prix, image url et description pour les utiliser dans le panier
+            //Ajouter lesles caractéristiques de mon article pour les utiliser dans le panier
             article.imageUrl = product.imageUrl;
             article.altTxt = product.altTxt;
             article.productPrice = product.price;
@@ -121,8 +109,8 @@ addToCart.addEventListener('click', event => {
             } else {
                 let cart = [];
                 cart = JSON.parse(localStorage.getItem('panier'));
-                let articleExiste;
                 // parcourir le tableau en comparant l'id et la couleur de mon tableau ajouté avec l'id et la couleur de l'article de mon panier 
+                let articleExiste;
                 for (let i = 0; i < cart.length; i++) {
                     if (cart[i]._id === article._id && cart[i].color === article.color) {
                         articleExiste = cart[i]
@@ -136,11 +124,9 @@ addToCart.addEventListener('click', event => {
                     // créer une condition pour limité la quantité enregistré dans le local storage
                     if (article.quantity >= 100) {
                         return alert("La quantité demandée est indisponible")
-
                     }
-
                     var indexOfarticleExiste = cart.indexOf(articleExiste);
-                    console.log (indexOfarticleExiste)
+                    console.log(indexOfarticleExiste)
                     //supprimer l'ancien article dans le tableau 
                     cart.splice(indexOfarticleExiste, 1);
                 }
@@ -152,6 +138,6 @@ addToCart.addEventListener('click', event => {
             }
         })
 
-}); 
+});
 
 
