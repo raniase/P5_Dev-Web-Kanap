@@ -9,7 +9,7 @@ const totalQty = document.getElementById("totalQuantity")
 const totalPrice = document.getElementById("totalPrice")
 const elementHtml = document.getElementsByClassName("cart__item__content__settings__quantity")
 
-if(cart!=null){
+if (cart != null) {
   //parcourir le contenue de mon panier  en ajoutant le contenue de chaque article enregistré dans les atributs html
   for (let i = 0; i < cart.length; i++) {
     recapPanier.innerHTML +=
@@ -42,7 +42,7 @@ if(cart!=null){
   for (let i = 0; i < htmlData.length; i++) {
     htmlData[i].addEventListener("click", () => {
       articleAsupprimer = htmlData[i].closest('article');
-     // console.log(articleAsupprimer)
+      // console.log(articleAsupprimer)
       const artColor = articleAsupprimer.dataset.color
       const idColor = articleAsupprimer.id
       cart = cart.filter(cart => (artColor || idColor) != (cart.color || cart._id));
@@ -114,23 +114,8 @@ if(cart!=null){
     validMail(this)
   });
   const validMail = function (inputMail) {
-    /*ituliser  le constructeur RegExp()let emailRegExp = new RegExp ('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$');*/
+    /*ituliser  le constructeur RegExp()*/
     let emailRegExp = new RegExp('^[a-zA-Z0-9ôöáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._-]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,4}$', 'g');
-    /* ^ Accent circonflexe	placé avant la séquance, permet de chercher tout caractère qui appartient  à cette séquance.*/
-    /* [] correspond à un caractère dans une liste de caractère spécifié entre crochets.
-    /*Elle pourra contenir :
-     tous caractères de a à z et de A à Z ( symbolisé par : a-zA-Z)
-    ou des chiffres de 0 à 9
-    ou des points 
-    ou des signes de soulignement : _ et -
-    mais pas d'autre caractère. ( crochet ] fermant)*/
-    /*- Le tiret représente l'intervalle à l'intérieur de la classe si il est placé au debut ou a la fin il se comporte comme tiret*/
-    /* + [] Cette séquence sera suivie obligatoirement ( signe +) du caractère @ peut occupée 1 ou plusieurs place dans le  formulaire*/
-    /* la sequance apres le @ doit etre un aplphabet entre {1}[a-zA-Z0-9.-_] et qui n'accepte que _*/
-    /*+[.] la séquence  d'apres doit etre suivie obligatoirement ( signe +) du caractère . le point qui peut etre presente sur tt le formulaire */
-    /* {1}[a-z]{2,10}$ et la fin du formulaire doit commacer par un alphabet miniscule sa langeure entre 2 et 10*/
-    /* g Do a global search  */
-
     let testMail = emailRegExp.test(inputMail.value)
     if (testMail) {
       document.getElementById("emailErrorMsg").innerHTML = "Email Valide !"
@@ -138,7 +123,6 @@ if(cart!=null){
       document.getElementById("emailErrorMsg").innerHTML = `"${inputMail.value} n'est pas valide !"`
       formMail.value = null
     }
-
   };
 
   // CREATION EXPRESSION REGULIAIRE VILLE
@@ -157,9 +141,7 @@ if(cart!=null){
     }
 
   };
-  /* * permet de verifier tout les caractere qui sont a gauche de la fin de la séquance*/
-
-  /* CREATION EXPRESSION REGULIAIRE ADRESSE*/
+  //CREATION EXPRESSION REGULIAIRE ADRESSE
 
   formAdress.addEventListener('change', function () {
     validAdress(this)
@@ -202,7 +184,7 @@ if(cart!=null){
     validFirst(this)
   });
   const validFirst = function (inputFirst) {
-    let FirstRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s -]*$', 'g');
+    let FirstRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._-]*$', 'g');
     let testFirst = FirstRegExp.test(inputFirst.value)
     if (testFirst) {
       document.getElementById("firstNameErrorMsg").innerHTML = "Prénom Valide !"
@@ -258,12 +240,11 @@ if(cart!=null){
         })
     }
   });
-} 
+}
 // afficher l'id de la commande dans le html de la page confiramation
-if (location.search){
+if (location.search) {
   //console.log (location.search)
   let idCommande = location.search.slice(1).split("?")[0].split("=")[1];
   const nbOrder = document.getElementById("orderId");
   nbOrder.innerHTML = idCommande
-  
 }
