@@ -92,7 +92,7 @@ addToCart.addEventListener('click', event => {
             }
         })
         .then(function (product) {
-            //Ajouter lesles caractéristiques de mon article pour les utiliser dans le panier
+            //Ajouter les caractéristiques de mon article pour les utiliser dans le panier
             article.imageUrl = product.imageUrl;
             article.altTxt = product.altTxt;
             article.productPrice = product.price;
