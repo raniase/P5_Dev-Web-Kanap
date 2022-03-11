@@ -19,11 +19,11 @@ let colorSelected = "";
 
 // classe Article qui permet de créer un objet article
 let Article = class {
-    constructor(_id, quantity, color, productPrice, imageUrl, name, altTxt,) {
+    constructor(_id, quantity, color, imageUrl, name, altTxt,) {
         this._id = _id;
         this.quantity = quantity;
         this.color = color;
-        this.productPrice = productPrice;
+        //this.productPrice = productPrice;
         this.imageUrl = imageUrl;
         this.name = name;
         this.altTxt = altTxt;
@@ -93,12 +93,6 @@ addToCart.addEventListener('click', event => {
         })
         .then(function (product) {
             //Ajouter les caractéristiques de mon article pour les utiliser dans le panier
-            article.imageUrl = product.imageUrl;
-            article.altTxt = product.altTxt;
-            article.productPrice = product.price;
-            article.name = product.name;
-            article.totalPrice = product.totalPrice;
-            article.contact = product.contact
             //si mon local storage est vide, créer un tableau et ajouter l'article selectionné
             if (localStorage.getItem('panier') === null) {
                 let cart = [];
@@ -136,7 +130,7 @@ addToCart.addEventListener('click', event => {
                 localStorage.setItem('panier', kanap);
 
             }
-        })
+      })
 
 });
 
